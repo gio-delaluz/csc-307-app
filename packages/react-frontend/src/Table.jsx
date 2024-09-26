@@ -1,19 +1,11 @@
 import React from "react";
 
-// table - represents tabular data
+// table - used to represent tabular data
 // thead - used to group header content in an HTML table
 // tr - used to define a row in an HTML table
-// th - defines aheader cell in a HTML table
+// th - used to define a header cell in a HTML table
+// td - used to define a data cell in a table
 // tbody - used to group the body content in an HTML table
-
-function Table() {
-    return (
-        <table>
-            <TableHeader />
-            <TableBody />
-        </table>
-    )
-}
 
 function TableHeader(){
     return (
@@ -26,27 +18,32 @@ function TableHeader(){
     );
 }
 
-function TableBody(){
+function TableBody(props) {
+    const rows = props.characterData.map((row, index) => {
+      return (
+        <tr key={index}>
+          <td>{row.name}</td>
+          <td>{row.job}</td>
+        </tr>
+      );
+    });
     return (
-        <tbody> 
-            <tr>
-                <td>Charlie</td>
-                <td>Janitor</td>
-            </tr>
-            <tr>
-                <td> Mac </td>
-                <td> Bouncer </td>
-            </tr>
-            <tr> 
-                <td> Dee </td>
-                <td> Aspiring Actress </td>
-            </tr>
-            <tr>
-                <td> Dennis </td>
-                <td> Bartender </td>
-            </tr>
+        <tbody>
+          {rows}
         </tbody>
-    );
+     );
 }
+
+
+function Table(props) {
+    return (
+        <table>
+            <TableHeader />
+            <TableBody characterData={props.characterData}/>
+        </table>
+    )
+}
+
+
 
 export default Table
