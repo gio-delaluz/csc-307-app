@@ -1,6 +1,7 @@
 // Good practice to keep grounds of related components in seperate files
 import React, { useState } from "react";
 import Table from "./Table";
+import Form from "./Form";
 
 // Our MyApp is at the top of the hierarchy, must pass the data down to the children
 // this is achieved with properties/props and with state
@@ -10,12 +11,7 @@ import Table from "./Table";
 function MyApp(){
     // useState() -- a react hook to create a piece of state named characters, which holds an array of objects
     // setCharacters -- which can be used to update the characters array later
-    const [characters, setCharacters] = useState([
-        { name: "Charlie", job: "Janitor" },
-        { name: "Mac", job: "Bouncer" },
-        {name: "Dee", job: "Aspring actress" },
-        { name: "Dennis", job: "Bartender"}
-    ]);
+    const [characters, setCharacters] = useState([]);
 
     // filtering the array
     function removeOneCharacter(index){
