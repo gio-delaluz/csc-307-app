@@ -1,10 +1,28 @@
 import React, { useState } from "react"
 
-function Form(){
-    const [person, SetPerson] = useState({
+function Form(props){
+    const [person, setPerson] = useState({
         name: "",
         job: ""
     });
+
+    function handleChange(event){
+        /* 
+        One event at a time (either editing/changing the name field or the job field),
+        will be called every time one of the fields (name or job) changes its value.
+        */
+        const { name, value } = event.target;
+    
+        if (name === "job") // don't quite understand this one
+            setPerson ({ name: person["name"], job: value });
+        else setPerson ({ name: value, job: person["job"]});
+    }
+
+    // Inside src/Form.jsx (a new inner function)
+    function submitForm() {
+    props.handleSubmit(person);
+    setPerson({ name: "", job: "" });
+  }
 
     return (
         <form>
@@ -24,20 +42,9 @@ function Form(){
             value={person.job}
             onChange={handleChange}
           />
+          <input type="button" value="Submit" onClick={submitForm} />
         </form>
       );
-}
-
-function handleChange(event){
-    /* 
-    One event at a time (either editing/changing the name field or the job field),
-    will be called every time one of the fields (name or job) changes its value.
-    */
-    const { name, value } = event.target;
-
-    if (name === "job") // don't quite understand this one
-        setPerson ({ name: person["name"], job: value });
-    else setPerson ({ name: value, job: person["job"]});
 }
 
 export default Form
