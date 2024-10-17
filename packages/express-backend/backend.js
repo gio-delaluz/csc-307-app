@@ -71,7 +71,7 @@ const deleteUserById = (id) => {
 
 
 const randomID = () => {
-  return Math.random().toString(36).substr(2, 9); // Generate a random string of 9 characters
+  return Math.random().toString(8); // Generate a random string of 9 characters
 };
 
 const addUser = (user) => {
@@ -123,7 +123,7 @@ app.delete('/users/:id', (req, res) => {
     const id = req.params["id"];
     const success = deleteUserById(id);
     if (success) {
-      res.status(200).send(`User with id ${id} deleted successfully.`);
+      res.status(204).send(`User with id ${id} deleted successfully.`);
     } else {
       res.status(404).send("User not found.");
     }
