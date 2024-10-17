@@ -31,6 +31,18 @@ function MyApp(){
         return promise
     }
 
+    function postUser(person) {
+        const promise = fetch("http://localhost:8000/users", {
+          method: "POST", // indicates that we want to perform a POST rather than a GET
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(person) // converts the JSON into a string format
+        });
+      
+        return promise;
+      }
+
     useEffect(() => {
         fetchUsers()
           .then((res) => res.json())
@@ -39,6 +51,14 @@ function MyApp(){
             console.log(error);
           });
       }, []);
+
+    function updateList(person) {
+        postUser(person) // 
+        .then(() => setCharacters([...characters, person]))
+        .catch((error) => {
+            console.log(error);
+        });
+    }
     
     return (
         <div className="container">
