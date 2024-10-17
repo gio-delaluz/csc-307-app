@@ -21,14 +21,26 @@ function MyApp(){
         setCharacters(updated);
     }
 
-    function updateList(person){
-        setCharacters([...characters, person])
+    function updateList(person) {
+        postUser(person)
+        .then((res) => {
+            if (res.status === 201) { // check for successful insertion to the backend, before adding to the frontend
+                return res.json();
+            } else {
+                throw new Error ("Failed to create user");
+            }
+        })
+        .then((newUser) => setCharacters([...characters, newUser]))
+        .catch((error) => {
+            console.log(error);
+        });
     }
 
-    function fetchUsers(){
-        // fetch returns the promise
-        const promise = fetch("http://localhost:8000/users");
-        return promise
+    function fetchUsers() {
+        return fetch("http://localhost:8000/users")
+          .then((res) => res.json())
+          .then((json) => setCharacters(json["users_list"]))
+          .catch((error) => console.error(error));
     }
 
     function postUser(person) {
@@ -51,14 +63,6 @@ function MyApp(){
             console.log(error);
           });
       }, []);
-
-    function updateList(person) {
-        postUser(person) // 
-        .then(() => setCharacters([...characters, person]))
-        .catch((error) => {
-            console.log(error);
-        });
-    }
     
     return (
         <div className="container">
