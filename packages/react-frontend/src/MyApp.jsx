@@ -13,29 +13,41 @@ function MyApp(){
     // setCharacters -- which can be used to update the characters array later
     const [characters, setCharacters] = useState([]);
 
-    // filtering the array
+    // deleting an entry and connected to the backend
     function removeOneCharacter(index){
-        const updated = characters.filter((character, i) => {
-            return i != index;
+        const usertToDelete = characters[index];
+
+        deleteUser(usertToDelete.id)
+        .then((res) => {
+            if (res.status === 204){
+                const updated = characters.filter((_, i) => {
+                    return i != index;
+                });
+                setCharacters(updated);
+            } else if (res.status === 404){
+                console.error("User not found!");
+            } else {
+                console.error("Failed to delete user");
+            }
+        }).catch((error) => {
+            console.error("Error with deleting user:", error)
         });
-        setCharacters(updated);
     }
 
     function updateList(person) {
         postUser(person)
-        .then((res) => {
-            if (res.status === 201) { // check for successful insertion to the backend, before adding to the frontend
+            .then((res) => {
+                if (res.status !== 201) {
+                    throw new Error("Object not created");
+                }
                 return res.json();
-            } else {
-                throw new Error ("Failed to create user");
-            }
-        })
-        .then((newUser) => setCharacters([...characters, newUser]))
-        .catch((error) => {
-            console.log(error);
-        });
+            })
+            .then((newUser) => setCharacters([...characters, newUser]))
+            .catch((error) => {
+                console.log(error);
+            });
     }
-
+    
     function fetchUsers() {
         return fetch("http://localhost:8000/users")
           .then((res) => res.json())
@@ -54,6 +66,12 @@ function MyApp(){
       
         return promise;
       }
+
+    function deleteUser(id) {
+        return fetch(`http://localhost:8000/users/${id}`, { // utilizing template literals
+            method: "DELETE",
+        });
+    }
 
     useEffect(() => {
         fetchUsers()
