@@ -49,6 +49,17 @@ const findUserByName = (name) => {
 const findUserById = (id) =>
     users["users_list"].find((user) => user["id"] === id);
 
+const deleteUserById = (id) => {
+  // findIndex finds the first instance and returns -1 if false
+  const index = users["users_list"].findIndex((user) => user["id"] === id);
+  if (index === -1) {
+    return false;
+  } else {
+    users["users_list"].splice(index, 1);
+    return true;
+  }
+};
+
 const addUser = (user) => {
     users["users_list"].push(user);
     return user;
@@ -84,6 +95,16 @@ app.post("/users", (req, res) => {
     const userToAdd = req.body;
     addUser(userToAdd);
     res.send();
+});
+
+app.delete('/users/:id', (req, res) => {
+    const id = req.params["id"];
+    const success = deleteUserById(id);
+    if (success) {
+      res.status(200).send(`User with id ${id} deleted successfully.`);
+    } else {
+      res.status(404).send("User not found.");
+    }
 });
 
 app.listen(port, () => {
