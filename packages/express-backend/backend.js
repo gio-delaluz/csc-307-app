@@ -40,6 +40,7 @@ const users = {
     ]
   };
 
+// .filter iterrates through an array and appends the items that satisfy the condition
 const findUserByName = (name) => {
     return users["users_list"].filter(
       (user) => user["name"] === name
@@ -48,6 +49,12 @@ const findUserByName = (name) => {
 
 const findUserById = (id) =>
     users["users_list"].find((user) => user["id"] === id);
+
+const findUserbyNameandJob = (name, job) => {
+    return users["users_list"].filter(
+      (user) => (user["name"] === name && user["job"] === job)
+    );
+};
 
 const deleteUserById = (id) => {
   // findIndex finds the first instance and returns -1 if false
@@ -72,7 +79,13 @@ app.get("/", (req, res) => {
 
 app.get("/users", (req, res) => {
     const name = req.query.name;
-    if (name != undefined) {
+    const job = req.query.job;
+
+    if (name != undefined & job != undefined){
+      let result = findUserbyNameandJob(name, job);
+      result = { users_list : result};
+      res.send(result);
+    } else if (name != undefined) {
       let result = findUserByName(name);
       result = { users_list: result };
       res.send(result);
