@@ -69,8 +69,15 @@ const deleteUserById = (id) => {
   }
 };
 
+
+const randomID = () => {
+  return Math.random().toString(36).substr(2, 9); // Generate a random string of 9 characters
+};
+
 const addUser = (user) => {
-    users["users_list"].push(user);
+    const id = randomID();
+    const newUser = { id, ...user}; // add the newly generated id to the front of the user_list for consistency
+    users["users_list"].push(newUser); // BEFORE pushing we want to provide a RandomID
     return user;
   };
   
@@ -108,8 +115,8 @@ app.get("/users/:id", (req, res) => {
 
 app.post("/users", (req, res) => {
     const userToAdd = req.body;
-    addUser(userToAdd);
-    res.send();
+    const newUser = addUser(userToAdd); // create a user with the newly generated ID
+    res.status(201).send(newUser);
 });
 
 app.delete('/users/:id', (req, res) => {
